@@ -1,5 +1,4 @@
-﻿using ImageControl;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class Scroll : MonoBehaviour

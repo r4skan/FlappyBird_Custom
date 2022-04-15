@@ -27,7 +27,7 @@ public class ScrollableObjectSpawner : MonoBehaviour
 
     private void Start()
     {
-        InstNextBackground();
+        Invoke(nameof(InstNextBackground), 0);
     }
 
     private void InstNextBackground()
@@ -39,7 +39,7 @@ public class ScrollableObjectSpawner : MonoBehaviour
             Vector2 spriteSize = spawnedObject[i].GetComponent<Collider2D>().bounds.size;
             
             // 조금이라도 겹치지 않으면 실선이 보이는 문제가 있어서 조금 겹치게 함
-            var nextPos = new Vector2(spawnedObject[i].transform.position.x + spriteSize.x - 0.5f,
+            var nextPos = new Vector2(spawnedObject[i].transform.position.x + spriteSize.x - 0.1f,
                 spawnedObject[i].transform.position.y);
             
             // 생성할 위치 설정

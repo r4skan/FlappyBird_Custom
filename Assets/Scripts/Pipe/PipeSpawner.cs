@@ -9,14 +9,22 @@ namespace Pipe
         
         public float spawnDistance = 5f;
         public float spawnDelay = 2f;
+        
+        [Header("WaveSpawn Options")]
+        public float degreeValue;
+        public ushort waveGrade;
+        public bool isRandomize;
 
-        public float waveDegree = 0;
+
+        [SerializeField, ReadOnly]
+        private float m_currentWaveDegree = 0;
+        private bool m_bIsPlusDegree = true;
+
 
         private void OnEnable()
         {
             // 주기적으로 생성
             Invoke(nameof(SpawnPipe), 0);
-            StartCoroutine(nameof(SpawnPipeWave));
         }
 
         private void OnDisable()
@@ -26,30 +34,41 @@ namespace Pipe
             StopCoroutine(nameof(SpawnPipeWave));
         }
 
-        private void SpawnPipe()
+        public void SpawnPipe()
         {
             Instantiate(pipe, new Vector2(spawnDistance, Random.Range(-2, 2)), Quaternion.identity);
             
             Invoke(nameof(SpawnPipe), spawnDelay);
         }
 
-        IEnumerator SpawnPipeWave()
+        public IEnumerator SpawnPipeWave()
         {
             while (true)
             {
-                if (waveDegree <= 180)
+                float sinValue = 0;
+                
+                if (isRandomize)
                 {
-                    waveDegree += 30;
+                    degreeValue = Random.Range(0, 91);
+                }
+                
+                sinValue = Mathf.Sin(m_currentWaveDegree * Mathf.PI / 180f);
+                //Debug.Log(sinValue);
+
+                if (m_bIsPlusDegree)
+                {
+                    m_bIsPlusDegree = m_currentWaveDegree >= degreeValue * (waveGrade - 1) ? false : true;
+                    m_currentWaveDegree += degreeValue;
                 }
                 else
                 {
-                    
+                    m_bIsPlusDegree = m_currentWaveDegree <= -degreeValue * (waveGrade - 1) ? true : false;
+                    m_currentWaveDegree -= degreeValue;
                 }
 
-                float sinValue = Mathf.Sin(waveDegree * Mathf.PI / 180f);
-                Debug.Log(sinValue);
+                Instantiate(pipe, new Vector2(spawnDistance, sinValue), Quaternion.identity);
 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(spawnDelay);
             }
         }
     }
