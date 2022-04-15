@@ -13,6 +13,9 @@ namespace Managers
         public Text scoreBoardCurScore;
         public Text scoreBoardBestScore;
         public PipeSpawner pipeSpawner;
+        public AudioClip[] audioClips;
+
+        private AudioSource audioSource;
 
         private ushort m_currentScore;
         private static ushort m_highScore;
@@ -25,6 +28,7 @@ namespace Managers
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             pipeSpawner = GetComponent<PipeSpawner>();
+            audioSource = GetComponent<AudioSource>();
 
             player.OnDead += GameOver;
             player.OnScored += AddScore;
@@ -36,6 +40,9 @@ namespace Managers
 
         private void GameOver()
         {
+            audioSource.clip = audioClips?[2];
+            audioSource?.Play();
+            
             gameOverUI.SetActive(true);
             
             if (m_highScore < m_currentScore)

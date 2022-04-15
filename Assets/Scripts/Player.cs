@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D m_playerRigidbody;
     private Animator m_playerAnimator;
+    private AudioSource birdAudio;
 
     public event UnityAction OnScored;
     public event UnityAction OnDead;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     {
         m_playerRigidbody = GetComponent<Rigidbody2D>();
         m_playerAnimator = GetComponent<Animator>();
+        birdAudio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -43,6 +45,8 @@ public class Player : MonoBehaviour
         {
             m_playerRigidbody.velocity = new Vector3(0f, -maxSpeed);
         }
+
+        birdAudio.Play();
     }
 
     private void AnimationUpdate()
